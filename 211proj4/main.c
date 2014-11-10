@@ -1,22 +1,43 @@
 /*
- File concordance.c
- Solution to CS 211 Assignment 3
+ Reed Rosenberg
+ CS 211 Assignment 4
  */
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
 
-/* Function prototypes */
-char *lowercase(char *str);
-int insert(char *word, char *Table[], int n);
-void print(char *Table[], int n);
-void empty(char *Table[], int n);
+/* OLD Function prototypes */
+char *lowercase(char *str);			// carries over
+int insert(char *word, char *Table[], int n);	// replaced by ht_insert
+void print(char *Table[], int n);		// replaced by ht_print
+void empty(char *Table[], int n);		// replaced by ht_empty
+
+// Global & macro definitions (suggested in assignment)
+#define HASH_MULTIPLIER 65599
+int htsize;			// size (in buckets) of hash table
+
+// sample type definition for a node
+struct NodeType {
+	char *word;		// a string representing the word
+	int count;		// the # of times that word appears in the text
+	struct NodeType *next;	// pointer to next node in list (if it exists)
+};
+typedef struct NodeType Node;
+
+Node **Table;
+
+// NEW Func prototypes
+unsigned int hash(const char *str);
+Node **ht_create(void);
+int ht_insert(Node **Table, const char *word);
+void ht_print(Node **Table);
+void ht_destroy(Node **Table);
 
 int main(int argc, char *argv[])
 {
 	int table_size;		// table size, a command-line argument
-	int n;			// current number of strings in yable
+	int n;			// current number of strings in table
 	int i;			// loop variable
 	char *line = NULL;  	// line buffer argument to getline()
 	size_t length = 0;  	// buffer size argument to getline()
@@ -72,6 +93,19 @@ int main(int argc, char *argv[])
 	return 0;
 }
 
+// EXAMPLE HASH FUNCTION
+/* Compute and return the bucket to which the string str hashes. */
+// [[[[ You should use the hash function discussed in class ]]]
+unsigned int hash(const char *str)
+{
+	int i;
+	unsigned int h = 0U;
+	for (i = 0; str[i] != '\0'; i++)
+		h = h * HASH_MULTIPLIER + (unsigned char) str[i];
+	return h % htsize;
+}
+
+// CHECK FOR USE WITH NEW FUNCTIONS
 /* Convert string str to lower-case */
 char *lowercase(char *str)
 {
@@ -83,6 +117,26 @@ char *lowercase(char *str)
 	}
 	return word;
 }
+
+/*
+ * Create a heap-allocated hash table with htsize buckets, initially empty, and 
+ * return a pointer to it. If the table cannot be allocated, issue an error 
+ * message on stderr and terminate program.
+ */
+Node **ht_create(void)
+{
+	return 0;
+}
+
+// CONVERT TO HT_INSERT
+/*
+ * insert word in lower-case into the hash table Table. If word is not in Table,
+ * insert a new node for the word in the bucket to which it hashes to, and 
+ * initialize its count to 1. The node should be inserted at the end of the list
+ * for the bucket. If word is already in Table, increment its count by 1. Return
+ * 1 on success, else return 0.
+ */
+// int ht_insert(Node **Table, const char *word)
 
 /* Insert the string word into Table; maintain strings in sorted order */
 /* Return value is n+1 if insert succeeds */
@@ -115,6 +169,14 @@ int insert(char *word, char *Table[], int n)
 	return n+1;
 }
 
+// CONVERT TO HT_PRINT
+/*
+ * Print all words stored in the hash table Table. Specifically, iterate over
+ * the buckets of the hash table and print the [word,count] tuples hashed to 
+ * each bucket.
+ */
+// void ht_print(Node **Table)
+
 /* Print all n strings currently in Table */
 void print(char *Table[], int n)
 {
@@ -128,6 +190,12 @@ void print(char *Table[], int n)
 	}
 	return;
 }
+
+// CONVERT TO HT_DESTROY
+/*
+ * destroy the hash table Table by freeing all the space allocated to the table.
+ */
+// void ht_destroy(Node **Table)
 
 /* Empty table by freeing all strings */
 void empty(char *Table[], int n)
