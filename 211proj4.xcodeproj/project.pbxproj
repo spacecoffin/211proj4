@@ -28,6 +28,8 @@
 		2DEA0A441A0F3339008CD66B /* 211proj4 */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = 211proj4; sourceTree = BUILT_PRODUCTS_DIR; };
 		2DEA0A471A0F3339008CD66B /* main.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = main.c; sourceTree = "<group>"; wrapsLines = 1; };
 		2DEA0A491A0F3339008CD66B /* _11proj4.1 */ = {isa = PBXFileReference; lastKnownFileType = text.man; path = _11proj4.1; sourceTree = "<group>"; };
+		2DEA0A501A12CFB6008CD66B /* hashtable.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = hashtable.c; sourceTree = "<group>"; };
+		2DEA0A511A12E14A008CD66B /* Notes.rtf */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; path = Notes.rtf; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -64,6 +66,8 @@
 			isa = PBXGroup;
 			children = (
 				2DEA0A471A0F3339008CD66B /* main.c */,
+				2DEA0A501A12CFB6008CD66B /* hashtable.c */,
+				2DEA0A511A12E14A008CD66B /* Notes.rtf */,
 				2DEA0A491A0F3339008CD66B /* _11proj4.1 */,
 			);
 			path = 211proj4;

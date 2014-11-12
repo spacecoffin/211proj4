@@ -1,0 +1,74 @@
+{\rtf1\ansi\ansicpg1252\cocoartf1187\cocoasubrtf400
+{\fonttbl\f0\fnil\fcharset0 Menlo-Regular;\f1\fnil\fcharset0 Menlo-Bold;\f2\fnil\fcharset0 Menlo-Italic;
+}
+{\colortbl;\red255\green255\blue255;}
+{\*\listtable{\list\listtemplateid1\listhybrid{\listlevel\levelnfc3\levelnfcn3\leveljc0\leveljcn0\levelfollow0\levelstartat1\levelspace360\levelindent0{\*\levelmarker \{upper-alpha\}.}{\leveltext\leveltemplateid1\'02\'00.;}{\levelnumbers\'01;}\fi-360\li720\lin720 }{\listname ;}\listid1}
+{\list\listtemplateid2\listhybrid{\listlevel\levelnfc23\levelnfcn23\leveljc0\leveljcn0\levelfollow0\levelstartat1\levelspace360\levelindent0{\*\levelmarker \{disc\}}{\leveltext\leveltemplateid101\'01\uc0\u8226 ;}{\levelnumbers;}\fi-360\li720\lin720 }{\listname ;}\listid2}}
+{\*\listoverridetable{\listoverride\listid1\listoverridecount0\ls1}{\listoverride\listid2\listoverridecount0\ls2}}
+\margl1440\margr1440\vieww9000\viewh8400\viewkind0
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural
+
+\f0\fs24 \cf0 ////////////////////////////////////////////////////////////////////////////////\
+1. Create a heap-allocated hash table with 
+\f1\b htsize
+\f0\b0  buckets, initially empty. (
+\f1\b **ht_create
+\f0\b0 )\
+2. Extract all words from text\
+\pard\tx220\tx720\pardeftab720\li720\fi-720
+\ls1\ilvl0\cf0 {\listtext	A.	}Your program should read several lines of text stored in a file and redirected to the standard input 
+\f1\b stdin
+\f0\b0 .\
+{\listtext	B.	}Parse the lines into individual words and store each word \'96 
+\f2\i in lower-case 
+\f0\i0 \'96 into the hash table. (
+\f1\b hash
+\f0\b0 )\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural
+\cf0 3. Store words in a hash table. (
+\f1\b ht_insert
+\f0\b0 )\
+4. Print all the 
+\f1\b [word,count] 
+\f0\b0 tuples stored in the hash table. (
+\f1\b ht_print
+\f0\b0 )\
+5. Destroy the hash table by freeing all the heap space allocated to it. (
+\f1\b ht_destroy
+\f0\b0 )\
+\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural
+\cf0 \ul \ulc0 Specifics of 
+\f1\b hash table
+\f0\b0 \ulnone \
+\pard\tx220\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\li720\fi-720\pardirnatural
+\cf0 Use chaining to resolve collisions *(see chaining).\
+Each word in the hash table should correspond to a unique node in the linked list for the bucket it hashes to.\
+Size of the hash table (i.e., number of buckets) (
+\f1\b htsize)
+\f0\b0  should be specified as a command-line argument. Make 
+\f1\b htsize 
+\f0\b0 a global variable.\
+\pard\tx220\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\li720\fi-720\pardirnatural
+\ls2\ilvl0\cf0 {\listtext	\'95	}Upon reading 
+\f1\b htsize
+\f0\b0 , allocate 
+\f2\i from the heap 
+\f0\i0 a hash table with 
+\f1\b htsize 
+\f0\b0 buckets, each initially empty.\
+\pard\pardeftab720
+\cf0 Let 
+\f1\b Table 
+\f0\b0 be a pointer to the heap-allocated hash table.\
+\pard\tx220\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\li720\fi-720\pardirnatural
+\cf0 \
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural
+\cf0 \
+CHAINING - words that hash to the same \'93bucket\'94 should be stored as a singly linked list of nodes for that bucket.\
+\
+WORD - a contiguous sequence of characters delimited by any of the following punctuation characters: the space character, period (.), comma (,), semicolon (;), colon (:), exclamation point (!), double quote ("), question mark (?), and newline character (\\n). Note that the single quote or apostrophe (') is not considered a delimiter.\
+	SAMENESS OF - Two words are considered the same if they consist of exactly the same sequence of characters, 
+\f2\i ignoring case
+\f0\i0 .\
+}
