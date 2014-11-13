@@ -5,6 +5,8 @@
 
 #include <stdio.h>		// for IO functions
 #include <stdlib.h>		// for Dynamic Memory Allocation
+#include <string.h>		// for string functions
+//#include <assert.h>		// for assert for debugging
 
 // Global variables & macro definitions
 #define HASH_MULTIPLIER 65599
@@ -51,5 +53,6 @@ int main(int argc, char *argv[])
 Node **ht_create(void)
 {
 	Node **ht = (Node **) malloc(htsize * sizeof(Node *));
+	memset( *ht, 0, sizeof( ht ));	// initialize to all 0s
 	return ht;
 }

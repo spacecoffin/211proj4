@@ -1,6 +1,3 @@
-
-
-#include <string.h>
 #include <ctype.h>
 
 /* OLD Function prototypes */
