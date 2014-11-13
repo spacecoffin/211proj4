@@ -69,8 +69,8 @@
 				2DEA0A471A0F3339008CD66B /* main.c */,
 				2DEA0A531A12E74A008CD66B /* disappearing_code.c */,
 				2DEA0A501A12CFB6008CD66B /* hashtable.c */,
-				2DEA0A511A12E14A008CD66B /* Notes.rtf */,
 				2DEA0A491A0F3339008CD66B /* _11proj4.1 */,
+				2DEA0A511A12E14A008CD66B /* Notes.rtf */,
 			);
 			path = 211proj4;
 			sourceTree = "<group>";

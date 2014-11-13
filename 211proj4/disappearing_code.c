@@ -1,29 +1,20 @@
 #include <ctype.h>
 
 /* OLD Function prototypes */
-char *lowercase(char *str);			// carries over
 int insert(char *word, char *Table[], int n);	// replaced by ht_insert
 void print(char *Table[], int n);		// replaced by ht_print
 void empty(char *Table[], int n);		// replaced by ht_empty
-
-
 
 // NEW Func prototypes
 unsigned int hash(const char *str);
 int ht_insert(Node **Table, const char *word);
 void ht_print(Node **Table);
-void ht_destroy(Node **Table);
 
 int main(int argc, char *argv[])
 {
 	int table_size;		// table size, a command-line argument
 	int n;			// current number of strings in table
 	int i;			// loop variable
-	char *line = NULL;  	// line buffer argument to getline()
-	size_t length = 0;  	// buffer size argument to getline()
-	char *token;			// token returned by strtok()
-	char *delim = " .,;:!\"?\n";	// delimiter characters for strtok()
-	char *word;			// token word in lower-case
 	
 	/* Table size is a command-line argument, in argv[1] */
 	if (argc <= 1) {
@@ -42,32 +33,6 @@ int main(int argc, char *argv[])
 	/* Initialize current number of strings in table to 0 */
 	n = 0;
 	
-	// Parse lines of input text; extract and insert words into string table
-	while (1) {
-		if (getline(&line, &length, stdin) == -1)// read next line
-			break;			// exit loop when no more lines
-		token = strtok(line, delim);	// extract next token from line
-		while (token != NULL) {
-			// store in word a copy of the token in lower-case
-			if ( (word = lowercase(token)) == NULL) {
-				// can't allocate space for word; empty table,
-				// and exit program
-				printf("ERROR: Could not allocate string\n");
-				empty(Table, n);
-				return 1;
-			}
-			if (n >= table_size) {	// table is full; print table,
-				// empty table, and exit program
-				printf("ERROR: Table is full\n");
-				print(Table, n);
-				empty(Table, n);
-				return 1;
-			}
-			n = insert(word, Table, n); // insert word into table
-			token = strtok(NULL, delim);	// extract next token
-		}
-	}
-	free(line);			// free line buffer
 	print(Table, n);		// print table
 	empty(Table, n);		// empty table
 	return 0;
@@ -83,19 +48,6 @@ unsigned int hash(const char *str)
 	for (i = 0; str[i] != '\0'; i++)
 		h = h * HASH_MULTIPLIER + (unsigned char) str[i];
 	return h % htsize;
-}
-
-// CHECK FOR USE WITH NEW FUNCTIONS
-/* Convert string str to lower-case */
-char *lowercase(char *str)
-{
-	char *word, *ptr;
-	
-	if ( (word = strdup(str)) !=  NULL) {
-		for (ptr = word; *ptr != '\0'; ptr++)
-			*ptr = tolower(*ptr);
-	}
-	return word;
 }
 
 // CONVERT TO HT_INSERT
@@ -161,22 +113,3 @@ void print(char *Table[], int n)
 	return;
 }
 
-// CONVERT TO HT_DESTROY
-/*
- * destroy the hash table Table by freeing all the space allocated to the table.
- */
-// void ht_destroy(Node **Table)
-
-/* Empty table by freeing all strings */
-void empty(char *Table[], int n)
-{
-	int i;
-	
-	for (i = 0; i < n; i++) {
-		if (Table[i] != NULL) {
-			free(Table[i]);
-			Table[i] = NULL;
-		}
-	}
-	return;
-}
