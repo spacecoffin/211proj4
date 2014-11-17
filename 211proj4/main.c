@@ -20,15 +20,17 @@ struct NodeType {
 };
 typedef struct NodeType Node;	// define Node to be synonymous with NodeType
 
+/*
 // Type definition for a Linked List (component of a hash table)
 struct ListType {
 	Node *first;
 };
 typedef struct ListType List;
+ */
 
 // Function prototypes
 Node **ht_create(void);			// create hash table
-List *list_create(void);		// create a linked list
+//List *list_create(void);		// create a linked list
 char *lowercase(char *str);		// ensure lowercase tokenization
 void ht_destroy(Node **Table);		// free allocated space for hash table
 
@@ -91,24 +93,23 @@ int main(int argc, char *argv[])
 
 }
 
-
 /*
  * Create a heap-allocated linked list initialized as a null pointer and return
  * a pointer to it. If the list cannot be allocated, return NULL.
- */
+ 
 List *list_create(void)
 {
 	List *list = (List *) malloc(sizeof(List));
 	
-	/*
 	if (list == 0) {
 		return NULL;
 	}
-	*/
 	
 	list->first = NULL;
 	return list;
 }
+ */
+
 
 /*
  * Create a heap-allocated hash table with htsize buckets, initially empty, and
@@ -121,16 +122,15 @@ Node **ht_create(void)
 	Node *Array;
 	int i;		// for incrementing loop
 	
-	Array = (List *) malloc(htsize * sizeof(Node *));
+	Array = (Node *) malloc(htsize * sizeof(Node *));
 	
 	if (Array == NULL) {
 		return NULL;
 	}
 	
 	for (i = 0; i < htsize; i++) {
-		//Array[i] = *(Node *) malloc(sizeof(void *));
-		Array[i] = list_create();
-		
+		Array[i] = *(Node *) malloc(sizeof(Node *));
+		//Array[i] = NULL;
 	}
 	
 	/*
