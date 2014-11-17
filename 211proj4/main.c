@@ -20,31 +20,15 @@ struct NodeType {
 };
 typedef struct NodeType Node;	// define Node to be synonymous with NodeType
 
-/*
-// Type definition for a Hash Table (a ptr to a ptr to a linked list)
-struct HashTable {
-	int *size;		// pointer to htsize (size of ht in buckets)
-	int n;			// number of total Nodes in hash table
-	Node **Table;
-};
-
+// Type definition for a Linked List (component of a hash table)
 struct ListType {
 	Node *first;
 };
 typedef struct ListType List;
 
-List *list;
-
-List *list_create(void) {
-	List *list = (List *) malloc(sizeof(List));
-	list->first = NULL;
-	return list;
-}
-list = list_create();
- */
-
 // Function prototypes
 Node **ht_create(void);			// create hash table
+List *list_create(void);		// create a linked list
 char *lowercase(char *str);		// ensure lowercase tokenization
 void ht_destroy(Node **Table);		// free allocated space for hash table
 
@@ -107,6 +91,25 @@ int main(int argc, char *argv[])
 
 }
 
+
+/*
+ * Create a heap-allocated linked list initialized as a null pointer and return
+ * a pointer to it. If the list cannot be allocated, return NULL.
+ */
+List *list_create(void)
+{
+	List *list = (List *) malloc(sizeof(List));
+	
+	/*
+	if (list == 0) {
+		return NULL;
+	}
+	*/
+	
+	list->first = NULL;
+	return list;
+}
+
 /*
  * Create a heap-allocated hash table with htsize buckets, initially empty, and
  * return a pointer to it. If the table cannot be allocated, issue an error
@@ -114,15 +117,29 @@ int main(int argc, char *argv[])
  */
 Node **ht_create(void)
 {
-	/* String table is a 1D array of pointers to strings */
-	Node *Table[table_size];
+	// Create a 1D array of pointers to Nodes
+	Node *Array;
+	int i;		// for incrementing loop
 	
+	Array = (List *) malloc(htsize * sizeof(Node *));
 	
+	if (Array == NULL) {
+		return NULL;
+	}
+	
+	for (i = 0; i < htsize; i++) {
+		//Array[i] = *(Node *) malloc(sizeof(void *));
+		Array[i] = list_create();
+		
+	}
+	
+	/*
 	// struct Node *hashtab[ARRAYSIZE];
 	Node **ht = (Node *) malloc(htsize * sizeof(Node *));
 	//(Node **) malloc(htsize * sizeof(Node *));
 	//memset( *ht, 0, sizeof( ht ));	// initialize to all 0s
 	return ht;
+	 */
 }
 
 // CHECK FOR USE WITH NEW FUNCTIONS
