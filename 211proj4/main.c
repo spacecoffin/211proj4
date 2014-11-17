@@ -12,13 +12,36 @@
 #define HASH_MULTIPLIER 65599
 int htsize;			// size (in buckets) of hash table
 
-// Type definition for a Node
+// Type definition for a Node (component of a linked list)
 struct NodeType {
 	char *word;		// a string representing the word
 	int count;		// the # of times that word appears in the text
 	struct NodeType *next;	// pointer to next node in list (if it exists)
 };
 typedef struct NodeType Node;	// define Node to be synonymous with NodeType
+
+/*
+// Type definition for a Hash Table (a ptr to a ptr to a linked list)
+struct HashTable {
+	int *size;		// pointer to htsize (size of ht in buckets)
+	int n;			// number of total Nodes in hash table
+	Node **Table;
+};
+
+struct ListType {
+	Node *first;
+};
+typedef struct ListType List;
+
+List *list;
+
+List *list_create(void) {
+	List *list = (List *) malloc(sizeof(List));
+	list->first = NULL;
+	return list;
+}
+list = list_create();
+ */
 
 // Function prototypes
 Node **ht_create(void);			// create hash table
@@ -32,7 +55,7 @@ int main(int argc, char *argv[])
 		printf("ERROR: Usage: %s table_size\n", argv[0]);
 		return 1;
 	} // else if for extra arguments????
-	htsize = atoi(argv[1]);
+	htsize = atoi(argv[1]);	// get value for global htsize from cmd line
 	
 	Node **Table;		// a pointer to the heap-allocated hash table
 	Table = ht_create();	// create hash table
@@ -62,10 +85,10 @@ int main(int argc, char *argv[])
 		while (token != NULL) {
 			// store in word a copy of the token in lower-case
 			if ( (word = lowercase(token)) == NULL) {
-				// can't allocate space for word; empty hash
+				// can't allocate space for word; destroy hash
 				// table and exit program
 				printf("ERROR: Could not allocate string\n");
-				ht_empty(Table, n);
+				ht_destroy(Table);
 				return 1;
 			}
 			if (n >= table_size) {	// table is full; print table,
@@ -91,9 +114,14 @@ int main(int argc, char *argv[])
  */
 Node **ht_create(void)
 {
+	/* String table is a 1D array of pointers to strings */
+	Node *Table[table_size];
+	
+	
 	// struct Node *hashtab[ARRAYSIZE];
-	Node **ht = (Node **) malloc(htsize * sizeof(Node *));
-	memset( *ht, 0, sizeof( ht ));	// initialize to all 0s
+	Node **ht = (Node *) malloc(htsize * sizeof(Node *));
+	//(Node **) malloc(htsize * sizeof(Node *));
+	//memset( *ht, 0, sizeof( ht ));	// initialize to all 0s
 	return ht;
 }
 

@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		2DEA0A481A0F3339008CD66B /* main.c in Sources */ = {isa = PBXBuildFile; fileRef = 2DEA0A471A0F3339008CD66B /* main.c */; };
 		2DEA0A4A1A0F3339008CD66B /* _11proj4.1 in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2DEA0A491A0F3339008CD66B /* _11proj4.1 */; };
+		2DEA0A551A197082008CD66B /* scratch.c in Sources */ = {isa = PBXBuildFile; fileRef = 2DEA0A541A197082008CD66B /* scratch.c */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -31,6 +32,7 @@
 		2DEA0A501A12CFB6008CD66B /* hashtable.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = hashtable.c; sourceTree = "<group>"; };
 		2DEA0A511A12E14A008CD66B /* Notes.rtf */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; path = Notes.rtf; sourceTree = "<group>"; };
 		2DEA0A531A12E74A008CD66B /* disappearing_code.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = disappearing_code.c; sourceTree = "<group>"; };
+		2DEA0A541A197082008CD66B /* scratch.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = scratch.c; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -69,6 +71,7 @@
 				2DEA0A471A0F3339008CD66B /* main.c */,
 				2DEA0A531A12E74A008CD66B /* disappearing_code.c */,
 				2DEA0A501A12CFB6008CD66B /* hashtable.c */,
+				2DEA0A541A197082008CD66B /* scratch.c */,
 				2DEA0A491A0F3339008CD66B /* _11proj4.1 */,
 				2DEA0A511A12E14A008CD66B /* Notes.rtf */,
 			);
@@ -126,6 +129,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2DEA0A551A197082008CD66B /* scratch.c in Sources */,
 				2DEA0A481A0F3339008CD66B /* main.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

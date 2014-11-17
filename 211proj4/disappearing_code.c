@@ -12,19 +12,10 @@ void ht_print(Node **Table);
 
 int main(int argc, char *argv[])
 {
-	int table_size;		// table size, a command-line argument
 	int n;			// current number of strings in table
 	int i;			// loop variable
 	
-	/* Table size is a command-line argument, in argv[1] */
-	if (argc <= 1) {
-		printf("ERROR: Usage: %s table_size\n", argv[0]);
-		return 1;
-	}
-	table_size = atoi(argv[1]);
-	
-	/* String table is a 1D array of pointers to strings */
-	char *Table[table_size];
+
 	
 	/* Initialize all pointers of string table to NULL */
 	for (i = 0; i < table_size; i++)
