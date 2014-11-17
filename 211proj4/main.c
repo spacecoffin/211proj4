@@ -32,6 +32,8 @@ typedef struct ListType List;
 Node **ht_create(void);			// create hash table
 //List *list_create(void);		// create a linked list
 char *lowercase(char *str);		// ensure lowercase tokenization
+unsigned int hash(const char *str);	// hashing function
+int ht_insert(Node **Table, const char *word);	// insert new word to hash table
 void ht_destroy(Node **Table);		// free allocated space for hash table
 
 int main(int argc, char *argv[])
@@ -155,34 +157,75 @@ char *lowercase(char *str)
 	return word;
 }
 
-// CONVERT TO HT_DESTROY
+// EXAMPLE HASH FUNCTION
+/* Compute and return the bucket to which the string str hashes. */
+// [[[[ You should use the hash function discussed in class ]]]
+unsigned int hash(const char *str)
+{
+	int i;
+	unsigned int h = 0U;
+	for (i = 0; str[i] != '\0'; i++)
+		h = h * HASH_MULTIPLIER + (unsigned char) str[i]; // unsd int??
+	return h % htsize;
+}
+
+// CONVERT TO HT_INSERT
+/*
+ * insert word in lower-case into the hash table Table. If word is not in Table,
+ * insert a new node for the word in the bucket to which it hashes to, and
+ * initialize its count to 1. The node should be inserted at the end of the list
+ * for the bucket. If word is already in Table, increment its count by 1. Return
+ * 1 on success, else return 0.
+ */
+// int ht_insert(Node **Table, const char *word)
+
+/* Insert the string word into Table; maintain strings in sorted order */
+/* Return value is n+1 if insert succeeds */
+int insert(char *word, char *Table[], int n)
+{
+	int i, low, high, mid;
+	
+	/* Search if word is already in Table using binary search */
+	low = 0;
+	high = n-1;
+	while (low <= high) {
+		mid = low + (high - low)/2;
+		if (strcmp(word, Table[mid]) == 0) {	// word is in Table[mid]
+			free(word);	// free heap space occupied by word
+			return n;
+		}
+		else if (strcmp(word, Table[mid]) > 0) {
+			low = mid + 1;
+		}
+		else {
+			high = mid - 1;
+		}
+	}
+	
+	/* word is not in Table; insert at Table[low] */
+	for (i = n-1; i >= low; i--)		// shift strings from Table[i]
+		// to Table[n-1] "down"
+		Table[i+1] = Table[i];
+	Table[low] = word;			// insert word into Table[i]
+	return n+1;
+}
+
 /*
  * Destroy the hash table Table by freeing all the space allocated to the table.
  */
-
-/* Empty table by freeing all strings */
-//void empty(char *Table[], int n)
 void ht_destroy(Node **Table)
 {
 	int i;
-	
-	for (i = 0; i < n; i++) {
-		if (Table[i] != NULL) {
-			free(Table[i]);
-			Table[i] = NULL;
-		}
-	}
-	return;
-}
-
-/*
-void list_free(List *list) {
 	Node *p, *nextp;
-	for (p = list->first; p != NULL; p = nextp) { nextp = p->next;
-		free(p->key);
-		free(p);
+	
+	for (i = 0; i < htsize; i++) {
+		for (p = Table[i]->first; p != NULL; p = nextp) {
+			nextp = p->next;
+			free(p->word);
+			free(p);
+		}
+		free(Table[i]);
+		// Table[i] = NULL;
 	}
-	free(list);
 	return;
 }
-*/
