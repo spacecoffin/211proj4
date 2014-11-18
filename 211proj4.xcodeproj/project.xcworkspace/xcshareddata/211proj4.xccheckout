@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>E8EBB149-4D8F-48DB-8130-DABD21272A24</string>
+	<key>IDESourceControlProjectName</key>
+	<string>211proj4</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>C84A60A2-5C5E-4DAC-A115-9763E46970CD</key>
+		<string>https://github.com/spacecoffin/211proj4.git</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>211proj4.xcodeproj/project.xcworkspace</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>C84A60A2-5C5E-4DAC-A115-9763E46970CD</key>
+		<string>../..</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>https://github.com/spacecoffin/211proj4.git</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>110</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>C84A60A2-5C5E-4DAC-A115-9763E46970CD</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>C84A60A2-5C5E-4DAC-A115-9763E46970CD</string>
+			<key>IDESourceControlWCCName</key>
+			<string>211proj4</string>
+		</dict>
+	</array>
+</dict>
+</plist>

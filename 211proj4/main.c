@@ -30,7 +30,7 @@ typedef struct ListType List;
 
 // Function prototypes
 Node **ht_create(void);			// create hash table
-//List *list_create(void);		// create a linked list
+Node *list_create(void);		// create a linked list
 char *lowercase(char *str);		// ensure lowercase tokenization
 unsigned int hash(const char *str);	// hashing function
 int ht_insert(Node **Table, const char *word);	// insert new word to hash table
@@ -97,21 +97,19 @@ int main(int argc, char *argv[])
 
 /*
  * Create a heap-allocated linked list initialized as a null pointer and return
- * a pointer to it. If the list cannot be allocated, return NULL.
- 
-List *list_create(void)
+ * a pointer to it which is a pointer to the first Node in the list. If the list
+ * cannot be allocated, return NULL.
+ */
+Node *list_create(void)
 {
-	List *list = (List *) malloc(sizeof(List));
+	Node *list = (Node *) malloc(sizeof(Node *));
 	
-	if (list == 0) {
+	if (list == NULL) {
 		return NULL;
 	}
 	
-	list->first = NULL;
 	return list;
 }
- */
-
 
 /*
  * Create a heap-allocated hash table with htsize buckets, initially empty, and
@@ -120,20 +118,23 @@ List *list_create(void)
  */
 Node **ht_create(void)
 {
-	// Create a 1D array of pointers to Nodes
-	Node *Array;
-	int i;		// for incrementing loop
 	
-	Array = (Node *) malloc(htsize * sizeof(Node *));
+	Node **Array;	// Create a 1D array of pointers to Nodes
+	int i;		// For incrementing loop
+	
+	Array = (Node **) malloc(htsize * sizeof(Node *));
 	
 	if (Array == NULL) {
 		return NULL;
 	}
 	
 	for (i = 0; i < htsize; i++) {
-		Array[i] = *(Node *) malloc(sizeof(Node *));
-		//Array[i] = NULL;
+		Array[i] = list_create();
+		//Array[i]->word = NULL;
+		//Array[i]->next = NULL;
 	}
+	
+	return Array;
 	
 	/*
 	// struct Node *hashtab[ARRAYSIZE];
@@ -166,6 +167,7 @@ unsigned int hash(const char *str)
 	unsigned int h = 0U;
 	for (i = 0; str[i] != '\0'; i++)
 		h = h * HASH_MULTIPLIER + (unsigned char) str[i]; // unsd int??
+	
 	return h % htsize;
 }
 
@@ -177,37 +179,38 @@ unsigned int hash(const char *str)
  * for the bucket. If word is already in Table, increment its count by 1. Return
  * 1 on success, else return 0.
  */
-// int ht_insert(Node **Table, const char *word)
 
 /* Insert the string word into Table; maintain strings in sorted order */
 /* Return value is n+1 if insert succeeds */
-int insert(char *word, char *Table[], int n)
+// int insert(char *word, char *Table[], int n)
+int ht_insert(Node **Table, const char *word)
 {
-	int i, low, high, mid;
+	int hash_result = hash(word);
+	int i;
 	
-	/* Search if word is already in Table using binary search */
-	low = 0;
-	high = n-1;
-	while (low <= high) {
-		mid = low + (high - low)/2;
-		if (strcmp(word, Table[mid]) == 0) {	// word is in Table[mid]
-			free(word);	// free heap space occupied by word
-			return n;
-		}
-		else if (strcmp(word, Table[mid]) > 0) {
-			low = mid + 1;
-		}
-		else {
-			high = mid - 1;
-		}
+	char *node_word;
+	for (Table = &Table[hash_result];
+	     Table[hash_result]->next != NULL;
+	     Table[hash_result]->next->next) {
+		
 	}
 	
-	/* word is not in Table; insert at Table[low] */
-	for (i = n-1; i >= low; i--)		// shift strings from Table[i]
-		// to Table[n-1] "down"
-		Table[i+1] = Table[i];
-	Table[low] = word;			// insert word into Table[i]
-	return n+1;
+	Node *new = (Node *) malloc(sizeof(Node));
+	new->word = strdup(word);
+	new->count++;
+	new->next = Table[i];
+	Table[i] = new;
+	return ;
+	
+	/*
+	if (strcmp(word, Table[mid]) == 0) {	// word is in Table[mid]
+		free(word);	// free heap space occupied by word
+		return n;
+	 }
+	else if (strcmp(word, Table[mid]) > 0) {
+	}
+	 */
+	
 }
 
 /*
