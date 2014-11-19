@@ -1,7 +1,4 @@
-#include <ctype.h>
-
 /* OLD Function prototypes */
-int insert(char *word, char *Table[], int n);	// replaced by ht_insert
 void print(char *Table[], int n);		// replaced by ht_print
 void empty(char *Table[], int n);		// replaced by ht_empty
 
@@ -13,13 +10,7 @@ int main(int argc, char *argv[])
 {
 	int n;			// current number of strings in table
 	int i;			// loop variable
-	
-
-	
-	/* Initialize all pointers of string table to NULL */
-	for (i = 0; i < table_size; i++)
-		Table[i] = NULL;
-	
+		
 	/* Initialize current number of strings in table to 0 */
 	n = 0;
 	

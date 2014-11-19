@@ -6,7 +6,8 @@
 #include <stdio.h>		// for IO functions
 #include <stdlib.h>		// for Dynamic Memory Allocation
 #include <string.h>		// for string functions
-//#include <assert.h>		// for assert for debugging
+#include <ctype.h>		// for character functions
+#include <assert.h>		// for assert for debugging & error catching
 
 // Global variables & macro definitions
 #define HASH_MULTIPLIER 65599
@@ -20,18 +21,9 @@ struct NodeType {
 };
 typedef struct NodeType Node;	// define Node to be synonymous with NodeType
 
-/*
-// Type definition for a Linked List (component of a hash table)
-struct ListType {
-	Node *first;
-};
-typedef struct ListType List;
- */
-
 // Function prototypes
 Node **ht_create(void);			// create hash table
-Node *list_create(void);		// create a linked list
-char *lowercase(char *str);		// ensure lowercase tokenization
+char *lowercase(char *str);		// convert string to lower-case
 unsigned int hash(const char *str);	// hashing function
 int ht_insert(Node **Table, const char *word);	// insert new word to hash table
 void ht_destroy(Node **Table);		// free allocated space for hash table
@@ -42,24 +34,18 @@ int main(int argc, char *argv[])
 	if (argc <= 1) {
 		printf("ERROR: Usage: %s table_size\n", argv[0]);
 		return 1;
-	} // else if for extra arguments????
-	htsize = atoi(argv[1]);	// get value for global htsize from cmd line
+	} else if ( (htsize = atoi(argv[1])) < 1) {
+		printf("ERROR: invalid hash table size (%s)\n", argv[1]);
+		return 1;
+	}
+	//htsize = atoi(argv[1]);	// get value for global htsize from cmd line
 	
 	Node **Table;		// a pointer to the heap-allocated hash table
 	Table = ht_create();	// create hash table
 	
-	/*
-	 * If the table cannot be allocated, issue an error message on stderr 
-	 * and terminate program.
-	 */
-	if (Table == NULL) {
-		fprintf(stderr, "ERROR: malloc failed\n");
-		return 1;
-	}
-	
 	// Variables for string tokenizing/line parsing
-	char *line = NULL;  	// line buffer argument to getline()
-	size_t length = 0;  	// buffer size argument to getline()
+	char *line = NULL;		// line buffer argument to getline()
+	size_t length = 0;		// buffer size argument to getline()
 	char *token;			// token returned by strtok()
 	char *delim = " .,;:!\"?\n";	// delimiter characters for strtok()
 	char *word;			// token word in lower-case
@@ -79,13 +65,16 @@ int main(int argc, char *argv[])
 				ht_destroy(Table);
 				return 1;
 			}
-			if (n >= table_size) {	// table is full; print table,
+			/*
+			if ( (hash(word)) >= htsize) {
+				// hash value is invalid
 				// empty table, and exit program
 				printf("ERROR: Table is full\n");
 				print(Table, n);
 				empty(Table, n);
 				return 1;
 			}
+			 */
 			n = insert(word, Table, n); // insert word into table
 			token = strtok(NULL, delim);	// extract next token
 		}
@@ -93,22 +82,6 @@ int main(int argc, char *argv[])
 	free(line);			// free line buffer
 
 
-}
-
-/*
- * Create a heap-allocated linked list initialized as a null pointer and return
- * a pointer to it which is a pointer to the first Node in the list. If the list
- * cannot be allocated, return NULL.
- */
-Node *list_create(void)
-{
-	Node *list = (Node *) malloc(sizeof(Node *));
-	
-	if (list == NULL) {
-		return NULL;
-	}
-	
-	return list;
 }
 
 /*
@@ -124,28 +97,15 @@ Node **ht_create(void)
 	
 	Array = (Node **) malloc(htsize * sizeof(Node *));
 	
-	if (Array == NULL) {
-		return NULL;
-	}
-	
+	assert(Array == NULL);	// Abort program if allocation fails
+		
 	for (i = 0; i < htsize; i++) {
-		Array[i] = list_create();
-		//Array[i]->word = NULL;
-		//Array[i]->next = NULL;
-	}
+		Array[i] = NULL;	// Initialize each pointer in the table
+	}				// as a NULL pointer.
 	
-	return Array;
-	
-	/*
-	// struct Node *hashtab[ARRAYSIZE];
-	Node **ht = (Node *) malloc(htsize * sizeof(Node *));
-	//(Node **) malloc(htsize * sizeof(Node *));
-	//memset( *ht, 0, sizeof( ht ));	// initialize to all 0s
-	return ht;
-	 */
+	return Array;			// Return a pointer to the hash table
 }
 
-// CHECK FOR USE WITH NEW FUNCTIONS
 /* Convert string str to lower-case */
 char *lowercase(char *str)
 {
@@ -166,26 +126,36 @@ unsigned int hash(const char *str)
 	int i;
 	unsigned int h = 0U;
 	for (i = 0; str[i] != '\0'; i++)
-		h = h * HASH_MULTIPLIER + (unsigned char) str[i]; // unsd int??
+		h = h * HASH_MULTIPLIER + (unsigned char) str[i];
 	
 	return h % htsize;
 }
 
-// CONVERT TO HT_INSERT
 /*
- * insert word in lower-case into the hash table Table. If word is not in Table,
+ * Insert word in lower-case into the hash table Table. If word is not in Table,
  * insert a new node for the word in the bucket to which it hashes to, and
  * initialize its count to 1. The node should be inserted at the end of the list
  * for the bucket. If word is already in Table, increment its count by 1. Return
  * 1 on success, else return 0.
  */
-
-/* Insert the string word into Table; maintain strings in sorted order */
-/* Return value is n+1 if insert succeeds */
-// int insert(char *word, char *Table[], int n)
 int ht_insert(Node **Table, const char *word)
 {
-	int hash_result = hash(word);
+	unsigned int hash_result = hash(word);
+	Node *p;
+	
+	if ( Table[hash_result] != NULL) {
+		// if bucket to hash word to is non-empty, search for word in it
+		for (p = Table[hash_result]; p != NULL; p = p->next) {
+			// using strncmp to prevent buffer over/underflow
+			// Note: the longest English word is 45 letters long
+			if (strncmp(p->word, word, (sizeof(char) * 45)) == 0) {
+				p->count
+			}
+		}
+			
+	}
+	
+	
 	int i;
 	
 	char *node_word;
