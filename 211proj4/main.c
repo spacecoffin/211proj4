@@ -149,13 +149,26 @@ int ht_insert(Node **Table, const char *word)
 			// using strncmp to prevent buffer over/underflow
 			// Note: the longest English word is 45 letters long
 			if (strncmp(p->word, word, (sizeof(char) * 45)) == 0) {
-				p->count
+				p->count++;	// word found, increment count
+				return 1;	// return success & exit func
 			}
-		}
-			
+		}	// if word is not found, proceed to insert new node
 	}
 	
+	Node *new = (Node *) malloc(sizeof(Node));
+	if (new == NULL) {
+		return 0;	// malloc for Node failed
+	}
+	if ( (new->word = strdup(word)) == NULL) {
+		return 0;	// malloc for copied string failed
+	}
+	new->count = 1;
+	new->next = NULL;
+	p--;			// decrement p so new can be inserted behind it
+	p->next = new;
+	return 1;
 	
+	/*
 	int i;
 	
 	char *node_word;
@@ -164,14 +177,9 @@ int ht_insert(Node **Table, const char *word)
 	     Table[hash_result]->next->next) {
 		
 	}
+	 */
 	
-	Node *new = (Node *) malloc(sizeof(Node));
-	new->word = strdup(word);
-	new->count++;
-	new->next = Table[i];
-	Table[i] = new;
-	return ;
-	
+		
 	/*
 	if (strcmp(word, Table[mid]) == 0) {	// word is in Table[mid]
 		free(word);	// free heap space occupied by word
