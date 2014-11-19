@@ -26,7 +26,8 @@ Node **ht_create(void);			// create hash table
 char *lowercase(char *str);		// convert string to lower-case
 unsigned int hash(const char *str);	// hashing function
 int ht_insert(Node **Table, const char *word);	// insert new word to hash table
-void ht_destroy(Node **Table);		// free allocated space for hash table
+void ht_print(Node **Table);		// print hash table
+void ht_destroy(Node **Table);		// free space allocated for hash table
 
 int main(int argc, char *argv[])
 {
@@ -65,23 +66,15 @@ int main(int argc, char *argv[])
 				ht_destroy(Table);
 				return 1;
 			}
-			/*
-			if ( (hash(word)) >= htsize) {
-				// hash value is invalid
-				// empty table, and exit program
-				printf("ERROR: Table is full\n");
-				print(Table, n);
-				empty(Table, n);
-				return 1;
-			}
-			 */
-			n = insert(word, Table, n); // insert word into table
+			ht_insert(Table, word);		// insert word to table
 			token = strtok(NULL, delim);	// extract next token
 		}
 	}
 	free(line);			// free line buffer
-
-
+	
+	ht_print(Table);		// print hash table
+	ht_destroy(Table);	// free space allocated for hash table
+	return 0;
 }
 
 /*
@@ -142,6 +135,7 @@ int ht_insert(Node **Table, const char *word)
 {
 	unsigned int hash_result = hash(word);
 	Node *p;
+	p = Table[hash_result];
 	
 	if ( Table[hash_result] != NULL) {
 		// if bucket to hash word to is non-empty, search for word in it
@@ -153,6 +147,7 @@ int ht_insert(Node **Table, const char *word)
 				return 1;	// return success & exit func
 			}
 		}	// if word is not found, proceed to insert new node
+		p--;	// decrement p so new can be inserted after it
 	}
 	
 	Node *new = (Node *) malloc(sizeof(Node));
@@ -164,31 +159,28 @@ int ht_insert(Node **Table, const char *word)
 	}
 	new->count = 1;
 	new->next = NULL;
-	p--;			// decrement p so new can be inserted behind it
 	p->next = new;
-	return 1;
-	
-	/*
+	return 1;	
+}
+
+/*
+ * Print all words stored in the hash table Table. Specifically, iterate over
+ * the buckets of the hash table and print the [word,count] tuples hashed to
+ * each bucket.
+ */
+void ht_print(Node **Table)
+{
 	int i;
+	Node *p;
 	
-	char *node_word;
-	for (Table = &Table[hash_result];
-	     Table[hash_result]->next != NULL;
-	     Table[hash_result]->next->next) {
-		
+	for (i = 0; i < htsize; i++) {
+		printf("\nHT[%d]:", i);
+		for (p = Table[i]; p!= NULL; p = p->next) {
+			printf(" [%s, %i] ", p->word, p->count);
+		}
 	}
-	 */
-	
-		
-	/*
-	if (strcmp(word, Table[mid]) == 0) {	// word is in Table[mid]
-		free(word);	// free heap space occupied by word
-		return n;
-	 }
-	else if (strcmp(word, Table[mid]) > 0) {
-	}
-	 */
-	
+	printf("/n");
+	return;
 }
 
 /*
@@ -200,13 +192,12 @@ void ht_destroy(Node **Table)
 	Node *p, *nextp;
 	
 	for (i = 0; i < htsize; i++) {
-		for (p = Table[i]->first; p != NULL; p = nextp) {
+		for (p = Table[i]; p != NULL; p = nextp) {
 			nextp = p->next;
 			free(p->word);
 			free(p);
 		}
 		free(Table[i]);
-		// Table[i] = NULL;
 	}
 	return;
 }
