@@ -42,6 +42,10 @@ int main(int argc, char *argv[])
 	Node **Table;		// a pointer to the heap-allocated hash table
 	Table = ht_create();	// create hash table
 	
+#ifdef DEBUG
+	printf("%x\n", (unsigned int) &Table);
+#endif
+	
 	// Variables for string tokenizing/line parsing
 	char *line = NULL;		// line buffer argument to getline()
 	size_t length = 0;		// buffer size argument to getline()
@@ -56,6 +60,9 @@ int main(int argc, char *argv[])
 		}
 		token = strtok(line, delim);	// extract next token from line
 		while (token != NULL) {
+#ifdef DEBUG
+			printf("%s\n", token);
+#endif
 			// store in word a copy of the token in lower-case
 			if ( (word = lowercase(token)) == NULL) {
 				// can't allocate space for word; destroy hash
@@ -64,6 +71,9 @@ int main(int argc, char *argv[])
 				ht_destroy(Table);
 				return 1;
 			}
+#ifdef DEBUG
+			printf("%s\n", word);
+#endif
 			if (ht_insert(Table, word) == 0) {	// add to table
 				printf("ERROR: insert failed (%s)\n", argv[1]);
 				return 1;
@@ -74,7 +84,7 @@ int main(int argc, char *argv[])
 	free(line);			// free line buffer
 	
 	ht_print(Table);		// print hash table
-	ht_destroy(Table);	// free space allocated for hash table
+	ht_destroy(Table);		// free space allocated for hash table
 	return 0;
 }
 
@@ -134,8 +144,12 @@ unsigned int hash(const char *str)
  */
 int ht_insert(Node **Table, const char *word)
 {
+#ifdef DEBUG
+	printf("ENTERED INSERT\n");
+#endif
 	unsigned int hash_result = hash(word);
-	Node *p, *prevp, *bucket = Table[hash_result];
+	Node *p, *prevp, *bucket;
+	bucket = Table[hash_result];
 	
 	if ( bucket != NULL) {
 		// if bucket to hash word to is non-empty, search for word in it
@@ -204,7 +218,7 @@ void ht_print(Node **Table)
 			printf(" [%s, %i] ", p->word, p->count);
 		}
 	}
-	printf("/n");
+	printf("\n");
 	return;
 }
 
@@ -223,6 +237,6 @@ void ht_destroy(Node **Table)
 			free(p);
 		}
 		free(Table[i]);
-	}
+	} free(Table);
 	return;
 }
