@@ -90,7 +90,7 @@ Node **ht_create(void)
 	
 	Array = (Node **) malloc(htsize * sizeof(Node *));
 	
-	assert(Array == NULL);	// Abort program if allocation fails
+	assert(Array != NULL);	// Abort program if allocation fails
 		
 	for (i = 0; i < htsize; i++) {
 		Array[i] = NULL;	// Initialize each pointer in the table
@@ -134,20 +134,35 @@ unsigned int hash(const char *str)
 int ht_insert(Node **Table, const char *word)
 {
 	unsigned int hash_result = hash(word);
-	Node *p;
-	p = Table[hash_result];
+	Node *p, *prevp, *bucket = Table[hash_result];
 	
 	if ( Table[hash_result] != NULL) {
 		// if bucket to hash word to is non-empty, search for word in it
-		for (p = Table[hash_result]; p != NULL; p = p->next) {
+		for (p = Table[hash_result]; p != NULL;
+		     prevp = p, p = p->next) {
 			// using strncmp to prevent buffer over/underflow
 			// Note: the longest English word is 45 letters long
 			if (strncmp(p->word, word, (sizeof(char) * 45)) == 0) {
 				p->count++;	// word found, increment count
 				return 1;	// return success & exit func
 			}
-		}	// if word is not found, proceed to insert new node
-		p--;	// decrement p so new can be inserted after it
+		}	// word not found in bucket. create new node.
+		
+		Node *new = (Node *) malloc(sizeof(Node));
+		if (new == NULL) {
+			return 0;	// malloc for Node failed
+		}
+		if ( (new->word = strdup(word)) == NULL) {
+			return 0;	// malloc for copied string failed
+		}
+		new->count = 1;
+		new->next = NULL;
+		if (prevp != NULL) {
+			prevp->next = new;
+		}
+		return 1;
+	} else if ( Table[hash_result] == NULL) {
+		
 	}
 	
 	Node *new = (Node *) malloc(sizeof(Node));
