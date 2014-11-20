@@ -39,8 +39,6 @@ int main(int argc, char *argv[])
 		printf("ERROR: invalid hash table size (%s)\n", argv[1]);
 		return 1;
 	}
-	//htsize = atoi(argv[1]);	// get value for global htsize from cmd line
-	
 	Node **Table;		// a pointer to the heap-allocated hash table
 	Table = ht_create();	// create hash table
 	
@@ -66,7 +64,10 @@ int main(int argc, char *argv[])
 				ht_destroy(Table);
 				return 1;
 			}
-			ht_insert(Table, word);		// insert word to table
+			if (ht_insert(Table, word) == 0) {	// add to table
+				printf("ERROR: insert failed (%s)\n", argv[1]);
+				return 1;
+			};
 			token = strtok(NULL, delim);	// extract next token
 		}
 	}
@@ -136,9 +137,9 @@ int ht_insert(Node **Table, const char *word)
 	unsigned int hash_result = hash(word);
 	Node *p, *prevp, *bucket = Table[hash_result];
 	
-	if ( Table[hash_result] != NULL) {
+	if ( bucket != NULL) {
 		// if bucket to hash word to is non-empty, search for word in it
-		for (p = Table[hash_result]; p != NULL;
+		for (p = bucket, prevp = bucket; p != NULL;
 		     prevp = p, p = p->next) {
 			// using strncmp to prevent buffer over/underflow
 			// Note: the longest English word is 45 letters long
@@ -149,33 +150,42 @@ int ht_insert(Node **Table, const char *word)
 		}	// word not found in bucket. create new node.
 		
 		Node *new = (Node *) malloc(sizeof(Node));
+		
 		if (new == NULL) {
 			return 0;	// malloc for Node failed
 		}
 		if ( (new->word = strdup(word)) == NULL) {
 			return 0;	// malloc for copied string failed
 		}
+		
 		new->count = 1;
 		new->next = NULL;
-		if (prevp != NULL) {
-			prevp->next = new;
+		
+		if (prevp != bucket) {
+			prevp->next = new;	// make last node point to new
+		} else if (prevp == bucket) {
+			bucket = new;		// make node first in bucket
+		} else {
+			return 0;		// linked list is broken
 		}
 		return 1;
-	} else if ( Table[hash_result] == NULL) {
+	} else if ( bucket == NULL) {
+		Node *new = (Node *) malloc(sizeof(Node));
 		
+		if (new == NULL) {
+			return 0;	// malloc for Node failed
+		}
+		if ( (new->word = strdup(word)) == NULL) {
+			return 0;	// malloc for copied string failed
+		}
+		
+		new->count = 1;
+		new->next = NULL;
+		bucket = new;
+		return 1;
 	}
 	
-	Node *new = (Node *) malloc(sizeof(Node));
-	if (new == NULL) {
-		return 0;	// malloc for Node failed
-	}
-	if ( (new->word = strdup(word)) == NULL) {
-		return 0;	// malloc for copied string failed
-	}
-	new->count = 1;
-	new->next = NULL;
-	p->next = new;
-	return 1;	
+	return 0;		// something went terribly wrong
 }
 
 /*
